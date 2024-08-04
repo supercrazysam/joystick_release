@@ -1,9 +1,10 @@
 #include <Servo.h>
 Servo myServo;  // create servo object to control a servo
 
+////1410 top(aggressive)  1420  top(conservative)      1460 mid       1545 with 4mm gap   1550 bottom with 3mm gap  
 /////////////////////////
-float joystick_max_pwm = 1550.0;   //slider at bottom position
-float joystick_min_pwm = 1400.0;   //slider at top position
+float joystick_max_pwm = 1540.0;   //slider at bottom position
+float joystick_min_pwm = 1415.0;   //slider at top position
 
 float joystick_mid_pwm = 1460.0;
 /////////////////////////
