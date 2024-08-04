@@ -9,7 +9,7 @@ int readIndex = 0; // Index of the current reading
 unsigned long total = 0; // Total of the readings
 unsigned long average = 0; // Average of the readings
 
-float joystick_max = 650.0; //650.0;
+float joystick_max = 600.0;//650.0; //650.0;
 float joystick_min = 48.0;
 
 float joystick_mid = joystick_min + ((joystick_max - joystick_min)/2);
@@ -89,15 +89,15 @@ float safe_start_mapJoystick(unsigned long value) {
 
 float mapJoystick(unsigned long value) {
   //universal map 
-  //float pwmValue = map(value, joystick_min, joystick_max, 1400, 1550);
+  ////1410 top(aggressive)  1420  top(conservative)      1460 mid       1545 with 4mm gap   1550 bottom with 3mm gap  
   if (value<=joystick_mid)
   {
-        float pwmValue = map(value, joystick_min, joystick_mid, 1400, 1460);
+        float pwmValue = map(value, joystick_min, joystick_mid, 1415, 1460);
         return pwmValue;
   }
   else if (value > joystick_mid)
   {
-        float pwmValue = map(value, joystick_mid, joystick_max, 1460, 1550);
+        float pwmValue = map(value, joystick_mid, joystick_max, 1460, 1540);
         return pwmValue;
   }
   
