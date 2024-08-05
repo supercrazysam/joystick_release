@@ -89,15 +89,25 @@ float safe_start_mapJoystick(unsigned long value) {
 
 float mapJoystick(unsigned long value) {
   //universal map 
-  ////1410 top(aggressive)  1420  top(conservative)      1460 mid       1545 with 4mm gap   1550 bottom with 3mm gap  
+  ////1410 top(aggressive)  1420  top(conservative)      1460 mid       1545 with ~4mm gap   1550 bottom with ~3mm gap  
   if (value<=joystick_mid)
   {
-        float pwmValue = map(value, joystick_min, joystick_mid, 1415, 1460);
+        //  1415 is the top limit      1460 is the position of mid point, dont change
+        //  using 1415 as top limit offers some flexibility, while not getting to close to the absolute mechanical upper limit. 
+        // increase the value to move the top limit down, decrease the value to move the top limit up.  
+        // ==================
+        //  there is ~1cm room above the 1415 top limit. The linkage physically cannot go up beyond that mechanical upper limit.
+        //  this is the best setup combo I have tested in the past two days, balanced between "easy return to zero", while not sacrificing too much backward travel. (forward max travel unaffected, reduced by 3mm safety margin only). 
+        float pwmValue = map(value, joystick_min, joystick_mid, 1415, 1460);    
         return pwmValue;
   }
   else if (value > joystick_mid)
   {
-        float pwmValue = map(value, joystick_mid, joystick_max, 1460, 1540);
+        //  1540 is the bottom limit      1460 is the position of mid point, dont change
+        //  using 1540 leaves some safety margin to the absolute mechanical bottom limit for the slider rail, would recommend keeping this value.  
+        // ==================
+        // increase the value to move the bottom limit down, decrease the value to move the bottom limit up.  
+        float pwmValue = map(value, joystick_mid, joystick_max, 1460, 1540);   
         return pwmValue;
   }
   
