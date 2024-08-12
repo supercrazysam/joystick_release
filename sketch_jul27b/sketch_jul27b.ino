@@ -108,7 +108,7 @@ float mapJoystick(unsigned long value) {
         //  using 1540 leaves some safety margin to the absolute mechanical bottom limit for the slider rail, would recommend keeping this value.  
         // ==================
         // increase the value to move the bottom limit down, decrease the value to move the bottom limit up.  
-        float pwmValue = map(value, joystick_mid, joystick_max, 1545, 1630);   
+        float pwmValue = map(value, joystick_mid, joystick_max, 1545, 1625);   
         return pwmValue;
   }
   
