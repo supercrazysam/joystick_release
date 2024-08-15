@@ -2,7 +2,7 @@
 Servo myServo;  // create servo object to control a servo
 
 const int joystickPin = 5; // Pin where the joystick PWM signal is connected    (D2 arduino mega 2560)
-const int numReadings = 3; // Number of readings to average
+const int numReadings = 5; // Number of readings to average
 
 unsigned long readings[numReadings]; // Array to store the readings
 int readIndex = 0; // Index of the current reading
@@ -95,14 +95,14 @@ float mapJoystick(unsigned long value) {
         //  1455 is the top limit      1545 is the position of mid point, dont change
         // increase the value to move the top limit down, decrease the value to move the top limit up.  
         // ==================
-        float top_limit = 1455;    // increase the top_limit value to move the top limit down, decrease the value to move the top limit up.  
+        float top_limit = 1425; //1455;    // increase the top_limit value to move the top limit down, decrease the value to move the top limit up.  
         float pwmValue = map(value, joystick_min, joystick_mid, top_limit, 1545);    
         return pwmValue;
   }
   else if (value > joystick_mid)
   {
         //  1625 is the bottom limit      1545 is the position of mid point, dont change
-        float bottom_limit = 1625;     // increase the bottom_limit value to move the bottom_limit down, decrease the value to move the top limit up.  
+        float bottom_limit = 1640;//1625;     // increase the bottom_limit value to move the bottom_limit down, decrease the value to move the top limit up.  
         float pwmValue = map(value, joystick_mid, joystick_max, 1545, bottom_limit);   
         return pwmValue;
   }
