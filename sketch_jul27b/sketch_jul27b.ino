@@ -16,6 +16,12 @@ float joystick_mid = joystick_min + ((joystick_max - joystick_min)/2);
 
 int safe_start = 0;
 
+// Define relay control pins
+const int relay_neutral = 11;  // neutral Relay connected to pin 11
+const int relay_reverse = 12;  // reverse Relay connected to pin 12
+
+//====================================================================//
+
 void setup() {
   Serial.begin(9600); // Start serial communication at 9600 baud
   pinMode(joystickPin, INPUT); // Set joystick pin as input
@@ -25,6 +31,15 @@ void setup() {
   for (int i = 0; i < numReadings; i++) {
     readings[i] = 0;
   }
+
+
+  // Set relay pins as outputs
+  pinMode(relay_neutral, OUTPUT);
+  pinMode(relay_reverse, OUTPUT);
+
+  // Initialize relays to high (HIGH turns them off)
+  digitalWrite(relay_neutral, HIGH);   //all relay should be off (HIGH state) on startup by default
+  digitalWrite(relay_reverse, HIGH);   //all relay should be off (HIGH state) on startup by default
 }
 
 void loop() {
@@ -82,12 +97,33 @@ float safe_start_mapJoystick(unsigned long value) {
   // Adjust the range values if needed      //48.0  back effective range    0.0 = no output    710.0 = all the way forward, effective range
   float mappedValue = constrain((((float)(value - joystick_min) / (joystick_max - joystick_min)) * 2.0 - 1.0), -1.0, 1.0);
   if ((mappedValue<0.15)&&(mappedValue>-0.15))
-      { return 0.0; }
+      { 
+        digitalWrite(relay_neutral, LOW);    //joystick reaching initialize zero zone, turn on the netural relay
+        return 0.0; 
+      }
   else
-      { return mappedValue; }
+      {
+        digitalWrite(relay_neutral, HIGH);   //joystick not reaching initialize zero zone yet, dont turn on the netural relay  
+        return mappedValue; 
+      }
 }
 
 float mapJoystick(unsigned long value) {
+
+  
+  ///////////////////////////
+  //relay output section while its in main operation loop, mimicking the logic from initialize section
+  float mappedValue = constrain((((float)(value - joystick_min) / (joystick_max - joystick_min)) * 2.0 - 1.0), -1.0, 1.0);
+  if ((mappedValue<0.15)&&(mappedValue>-0.15))
+      { 
+        digitalWrite(relay_neutral, LOW);    //joystick reaching initialize zero zone, turn on the netural relay
+      }
+  else
+      {
+        digitalWrite(relay_neutral, HIGH);   //joystick not reaching initialize zero zone yet, dont turn on the netural relay  
+      }
+
+  /////////////////////////////////////    
   //universal map 
   //1455 up    1545 mid   1630  down   aug 12 2024
   if (value<=joystick_mid)
@@ -97,6 +133,17 @@ float mapJoystick(unsigned long value) {
         // ==================
         float top_limit = 1425; //1455;    // increase the top_limit value to move the top limit down, decrease the value to move the top limit up.  
         float pwmValue = map(value, joystick_min, joystick_mid, top_limit, 1545);    
+
+        //determine when the backward relay gets trigger:
+        float backward_relay_trigger = 1520;
+        if (pwmValue< backward_relay_trigger)
+        {
+            digitalWrite(relay_reverse, LOW);    //going backward enough, time to turn on the reverse relay (LOW state)
+        }
+        else
+        {
+            digitalWrite(relay_reverse, HIGH);    //not going backward enough, turn off the reverse relay  (HIGH state)
+        }
         return pwmValue;
   }
   else if (value > joystick_mid)
@@ -104,7 +151,9 @@ float mapJoystick(unsigned long value) {
         //  1625 is the bottom limit      1545 is the position of mid point, dont change
         float bottom_limit = 1640;//1625;     // increase the bottom_limit value to move the bottom_limit down, decrease the value to move the top limit up.  
         float pwmValue = map(value, joystick_mid, joystick_max, 1545, bottom_limit);   
+
+        digitalWrite(relay_reverse, HIGH);    //going forward, turn off the reverse relay
         return pwmValue;
   }
-  
+
 }
