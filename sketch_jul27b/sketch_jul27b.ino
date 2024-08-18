@@ -55,7 +55,7 @@ void loop() {
       Serial.print("before Mapped Value: ");
       Serial.println(mappedValue);
 
-      myServo.writeMicroseconds(1460);  //always set motor to zero position before joystick have returned to zero 
+      myServo.writeMicroseconds(1545);  //always set motor to zero position before joystick have returned to zero 
       if (mappedValue==0) 
       { 
         safe_start=1;
