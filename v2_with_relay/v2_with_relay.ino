@@ -40,7 +40,7 @@ void setup() {
   pinMode(joystickPin, INPUT); // Set joystick pin as input
   myServo.attach(9);  // attaches the servo on pin 9 to the servo object
 
-  pinMode(upstream_analogPin, INPUT);  // The digital pin where you read the PWM analog signal from upstream 
+  pinMode(upstream_analogPin, INPUT_PULLUP);  // The digital pin where you read the PWM analog signal from upstream 
 
   // Set relay pins as outputs
   pinMode(relay_neutral, OUTPUT);
