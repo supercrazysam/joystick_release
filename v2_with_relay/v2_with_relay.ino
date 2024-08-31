@@ -91,7 +91,7 @@ void loop() {
   {
     //see if we should override the manual control  ( we override if we get 5% - 95% dutycycle from upstream,   else just do manual)
     // Read the analog value (0-1023)
-    float dutyCycle = (pulseIn(upstream_analogPin, HIGH,0.01)/ 2040.82)*100.0; // mega 2560 normal pin by default = 490hz
+    float dutyCycle = (pulseIn(upstream_analogPin, HIGH, 100000 )/ 2040.82)*100.0; // mega 2560 normal pin by default = 490hz    timeout 0.1s
     upstream_dutycycle_value = constrain( dutyCycle, 0.0, 100.0);
 
     if ((upstream_dutycycle_value>=10.0) &&  (upstream_dutycycle_value<=90.0))  //auto upstream override mode, only when its between 10% and 90%
