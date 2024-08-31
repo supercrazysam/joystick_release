@@ -124,7 +124,7 @@ float safe_start_mapJoystick(unsigned long value) {
   // Map the pulse width value (corresponding to 48.0 to 650.0) to the range of -1 to 1
   // Adjust the range values if needed      //48.0  back effective range    0.0 = no output    710.0 = all the way forward, effective range
   float mappedValue = constrain((((float)(value - joystick_min) / (joystick_max - joystick_min)) * 2.0 - 1.0), -1.0, 1.0);
-  if ((mappedValue<0.2)&&(mappedValue>-0.2))    //-0.15   0.15 original
+  if ((mappedValue<0.15)&&(mappedValue>-0.15)) 
       { 
         digitalWrite(relay_neutral, LOW);    //joystick reaching initialize zero zone, turn on the netural relay
         return 0.0; 
@@ -142,7 +142,7 @@ float mapJoystick(unsigned long value) {
   ///////////////////////////
   //relay output section while its in main operation loop, mimicking the logic from initialize section
   float mappedValue = constrain((((float)(value - joystick_min) / (joystick_max - joystick_min)) * 2.0 - 1.0), -1.0, 1.0);
-  if ((mappedValue<0.15)&&(mappedValue>-0.15))
+  if ((mappedValue<0.2)&&(mappedValue>-0.2))   //original 0.15
       { 
         digitalWrite(relay_neutral, LOW);    //joystick reaching initialize zero zone, turn on the netural relay
       }
