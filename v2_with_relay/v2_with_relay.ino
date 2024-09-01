@@ -94,7 +94,8 @@ void loop() {
     float dutyCycle = (pulseIn(upstream_analogPin, HIGH, 100000 )/ 2040.82)*100.0; // mega 2560 normal pin by default = 490hz    timeout 0.1s
     upstream_dutycycle_value = constrain( dutyCycle, 0.0, 100.0);
 
-    if ((upstream_dutycycle_value>=10.0) &&  (upstream_dutycycle_value<=90.0))  //auto upstream override mode, only when its between 10% and 90%
+    //if ((upstream_dutycycle_value>=10.0) &&  (upstream_dutycycle_value<=90.0))  //auto upstream override mode, only when its between 10% and 90%
+    if ((upstream_dutycycle_value>=5.0) &&  (upstream_dutycycle_value<=95.0))  //auto upstream override mode, only when its between 10% and 90%
     //50.0 is middle   10.0 is max backward   90.0 is max forward
     {
       float override_pwm_value = map_upstream(upstream_dutycycle_value);
@@ -192,7 +193,7 @@ float mapJoystick(unsigned long value) {
 
 float map_upstream(float value) {
 
-  float upstream_command_value = value;    //from 10% (max reverse) to 90%  (max forward)
+  float upstream_command_value = constrain(value, 10.0, 90.0);    //from 10% (max reverse) to 90%  (max forward)
   if ((upstream_command_value<55.0)&&(upstream_command_value>45.0))   //assume neutral if its anywhere between 45% to 55%  ~50%
       { 
         digitalWrite(relay_neutral, LOW);    //joystick reaching initialize zero zone, turn on the netural relay
