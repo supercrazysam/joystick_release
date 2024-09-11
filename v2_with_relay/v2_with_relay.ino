@@ -194,7 +194,7 @@ float mapJoystick(unsigned long value) {
 float map_upstream(float value) {
 
   float upstream_command_value = constrain(value, 10.0, 90.0);    //from 10% (max reverse) to 90%  (max forward)
-  if ((upstream_command_value<55.0)&&(upstream_command_value>45.0))   //assume neutral if its anywhere between 45% to 55%  ~50%
+  if ((upstream_command_value<60.0)&&(upstream_command_value>40.0))   //assume neutral if its anywhere between 45% to 55%  ~50%
       { 
         digitalWrite(relay_neutral, LOW);    //joystick reaching initialize zero zone, turn on the netural relay
       }
