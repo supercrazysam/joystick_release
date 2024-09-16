@@ -16,6 +16,8 @@ float joystick_mid = joystick_min + ((joystick_max - joystick_min)/2);
 
 int safe_start = 0;
 
+int safe_resume_back_to_manual = 0;
+
 // Define relay control pins
 const int relay_neutral = 11;  // neutral Relay connected to pin 11
 const int relay_reverse = 12;  // reverse Relay connected to pin 12
@@ -95,7 +97,10 @@ void loop() {
     upstream_dutycycle_value = constrain( dutyCycle, 0.0, 100.0);
 
     //if ((upstream_dutycycle_value>=10.0) &&  (upstream_dutycycle_value<=90.0))  //auto upstream override mode, only when its between 10% and 90%
-    if ((upstream_dutycycle_value>=5.0) &&  (upstream_dutycycle_value<=95.0))  //auto upstream override mode, only when its between 10% and 90%
+    
+    //if ((upstream_dutycycle_value>=5.0) &&  (upstream_dutycycle_value<=95.0))  //auto upstream override mode, only when its between 10% and 90%
+    if (  ((upstream_dutycycle_value>=5.0) &&  (upstream_dutycycle_value<=47.5))  || ((upstream_dutycycle_value>=52.5) &&  (upstream_dutycycle_value<=95.0))  )
+      
     //50.0 is middle   10.0 is max backward   90.0 is max forward
     {
       float override_pwm_value = map_upstream(upstream_dutycycle_value);
@@ -104,16 +109,29 @@ void loop() {
       Serial.print("[Override from upstream detected] Mapped Value: ");
       Serial.println(override_pwm_value);
       myServo.writeMicroseconds(override_pwm_value);
+
+      safe_resume_back_to_manual = 0;  //it already went into upstream override mode, so reset manual flag
     }
     else  //manual mode
     {
-    
-       float mappedValue = mapJoystick(average);
-       Serial.print("Joystick Value: ");
-       Serial.print(average);
-       Serial.print(" Mapped Value: ");
-       Serial.println(mappedValue);
-       myServo.writeMicroseconds(mappedValue);  // set the servo to the current PWM value
+       if (safe_resume_back_to_manual==0)   //seems like the system just started, or just resume back into manual from upstream override
+       {
+           float mappedValue = safe_start_mapJoystick(average);
+           myServo.writeMicroseconds(1545);  //always set motor to zero position before joystick have returned to zero
+           if (mappedValue==0) 
+           {
+               safe_resume_back_to_manual = 1;
+           }
+       }
+       else // when its safe, continue manual mode
+       {
+           float mappedValue = mapJoystick(average);
+           Serial.print("Joystick Value: ");
+           Serial.print(average);
+           Serial.print(" Mapped Value: ");
+           Serial.println(mappedValue);
+           myServo.writeMicroseconds(mappedValue);  // set the servo to the current PWM value
+       }
     }
   }
 
