@@ -116,9 +116,9 @@ void loop() {
     {
        if (safe_resume_back_to_manual==0)   //seems like the system just started, or just resume back into manual from upstream override
        {
-           float mappedValue = safe_start_mapJoystick(average);
+           float resume_manual_mappedValue = safe_start_mapJoystick(average);
            myServo.writeMicroseconds(1545);  //always set motor to zero position before joystick have returned to zero
-           if (mappedValue==0) 
+           if (resume_manual_mappedValue==0) 
            {
                safe_resume_back_to_manual = 1;
            }
