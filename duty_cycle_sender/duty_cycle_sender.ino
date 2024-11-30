@@ -6,6 +6,8 @@ void setup() {
 }
 
 void loop() {
+
+     
     // Loop through PWM values from 0% to 100%
     for (int pwmValue = 26; pwmValue <= 230; pwmValue++) {   // 0   255
         analogWrite(pwmPin, pwmValue); // Output PWM signal
@@ -19,4 +21,11 @@ void loop() {
         delay(50); // 50ms delay between each step
         Serial.println(pwmValue);
     }
+
+    delay(50);
+    analogWrite(pwmPin, 127); // Output for manual override again
+    delay(10000);  //10 seconds
+
+
+    
 }
