@@ -14,8 +14,6 @@ void loop() {
 
     dutyCycle = duration / 2040.82; // mega 2560 normal pin by default = 490hz   The period for a 490 Hz signal is approximately 2040.82 microseconds
     dutyCycle = constrain( dutyCycle, 0.0, 1.0);
-    //dutyCycle = duration / 1020.41;   //since pin 13 of mega 2560 = 980hz
-    //For a 50Hz PWM signal, the full period is 20ms = 20000us
 
     // Print the duty cycle as a float (0.0 to 1.0)
     Serial.println(dutyCycle);
