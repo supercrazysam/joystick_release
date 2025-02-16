@@ -44,7 +44,7 @@ float center_position = 1535;   //increase the center_position value to move the
 */
 
 float top_limit = 2000;
-float bottom_limit = 1000;
+float bottom_limit = 1200;
 float center_position = 1500;
 
 //====================================================================//
@@ -199,6 +199,7 @@ float mapJoystick(unsigned long value) {
   {
         float pwmValue = map(value, joystick_min, joystick_mid, top_limit, center_position);    
 
+        /*
         //determine when the backward relay gets trigger:
         float backward_relay_trigger = 1520;    //right now middle is 1545,  
         //so if we want to trigger it when middle then set this to 1545,  setting value less than 1545 will make it only trigger further back.
@@ -211,12 +212,35 @@ float mapJoystick(unsigned long value) {
             digitalWrite(relay_reverse, HIGH);    //not going backward enough, turn off the reverse relay  (HIGH state)
         }
         return pwmValue;
+        */
+
+        //clutch motor special case since dir inverted
+        //determine when the backward relay gets trigger:
+        float backward_relay_trigger = 1520;    //right now middle is 1545,  
+        //so if we want to trigger it when middle then set this to 1545,  setting value less than 1545 will make it only trigger further back.
+        if (pwmValue> backward_relay_trigger)
+        {
+            digitalWrite(relay_reverse, LOW);    //going backward enough, time to turn on the reverse relay (LOW state)
+        }
+        else
+        {
+            digitalWrite(relay_reverse, HIGH);    //not going backward enough, turn off the reverse relay  (HIGH state)
+        }
+
+        //#CLUTCH MOTOR INVERSION
+        pwmValue = center_position - (pwmValue - center_position);
+        
+        return pwmValue;
   }
   else if (value > joystick_mid)
   {
         float pwmValue = map(value, joystick_mid, joystick_max, center_position, bottom_limit);   
 
         digitalWrite(relay_reverse, HIGH);    //going forward, turn off the reverse relay
+
+        //#CLUTCH MOTOR INVERSION
+        pwmValue = center_position - (pwmValue - center_position);
+        
         return pwmValue;
   }
 
@@ -251,6 +275,9 @@ float map_upstream(float value) {
         {
             digitalWrite(relay_reverse, HIGH);    //not going backward enough, turn off the reverse relay  (HIGH state)
         }
+
+        //#CLUTCH MOTOR INVERSION
+        override_pwmValue = center_position - (override_pwmValue - center_position);
         return override_pwmValue;
   }
   else if (upstream_command_value > upstream_max_middle)
@@ -258,6 +285,10 @@ float map_upstream(float value) {
         float override_pwmValue = map(upstream_command_value, upstream_max_middle, upstream_max_forward, center_position, bottom_limit);   
 
         digitalWrite(relay_reverse, HIGH);    //going forward, turn off the reverse relay
+
+        
+        //#CLUTCH MOTOR INVERSION
+        override_pwmValue = center_position - (override_pwmValue - center_position);
         return override_pwmValue;
   }
 
