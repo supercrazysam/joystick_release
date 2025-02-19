@@ -32,20 +32,16 @@ float upstream_max_forward = 90.0;   //90%
 float upstream_max_middle  = 50.0;   //50%
 float upstream_max_reverse = 10.0;   //10%
 
-//  1375 is the top limit      1545 is the position of mid point, dont change
-// increase the value to move the top limit down, decrease the value to move the top limit up.  
-// ==================
-/*
-float top_limit = 1435; //1375;    // increase the top_limit value to move the top limit down, decrease the value to move the top limit up.  
-//  1665 is the bottom limit      1545 is the position of mid point, dont change
-float bottom_limit = 1620; //1665;     // increase the bottom_limit value to move the bottom_limit down, decrease the value to move the bottom limit up.  
+//Steel wire travel range adjustion area,  recommend adjusting only in increment of 10, always test and vertify.... 
+//you don't want to have a wormgear motor breaking any of the limit of the steel wire tube 
 
-float center_position = 1535;   //increase the center_position value to move the center_position down, decrease the value to move the center_position up. 
-*/
-
-float top_limit = 2000;
-float bottom_limit = 1200;
-float center_position = 1500;
+//open end;    vehicle backward direction, pull steel wire out of the tube 
+float top_limit = 2000;     // reduce this number to move the "backward-direction" limit closer to middle point,  increase this number to move the "backward-direction" limit away from middle point 
+//=========================================================
+//blocker end; vehicle forward direction,  pushs steel wire back into the tube  
+float bottom_limit = 1200;   //increase this number to move the "forward-direction" limit closer to middle point,  decrease this number to move the "forward-direction" limit away from middle point 
+//==========================================================
+float center_position = 1500;  //middle point, NEVER CHANGE
 
 //====================================================================//
 
