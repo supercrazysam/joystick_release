@@ -36,10 +36,10 @@ float upstream_max_reverse = 10.0;   //10%
 //you don't want to have a wormgear motor breaking any of the limit of the steel wire tube 
 
 //open end;    vehicle backward direction, pull steel wire out of the tube 
-float top_limit = 1500;     // reduce this number to move the "backward-direction" limit closer to middle point,  increase this number to move the "backward-direction" limit away from middle point 
+float top_limit = 1615;     // reduce this number to move the "backward-direction" limit closer to middle point,  increase this number to move the "backward-direction" limit away from middle point 
 //=========================================================
 //blocker end; vehicle forward direction,  pushs steel wire back into the tube  
-float bottom_limit = 1450;   //increase this number to move the "forward-direction" limit closer to middle point,  decrease this number to move the "forward-direction" limit away from middle point 
+float bottom_limit = 1335;   //increase this number to move the "forward-direction" limit closer to middle point,  decrease this number to move the "forward-direction" limit away from middle point 
 //==========================================================
 float center_position = 1500;  //middle point, NEVER CHANGE
 
