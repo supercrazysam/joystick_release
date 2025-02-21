@@ -12,7 +12,7 @@ unsigned long total = 0; // Total of the readings
 unsigned long average = 0; // Average of the readings
 
 float joystick_max = 950;     //960 clutch joystick    //930.0; //930.0; //v3 true joystick max =940   //900.0;//v2 true joystick max become 950 ///// //600.0;//650.0; //650.0;
-float joystick_min = 120'     //110 clutch joystick    //110.0; //155.0; //v3 true joystick min =144  //120.0;//v2 true joystick min become 110 ///// //48.0;
+float joystick_min = 120;     //110 clutch joystick    //110.0; //155.0; //v3 true joystick min =144  //120.0;//v2 true joystick min become 110 ///// //48.0;
 
 float joystick_mid = joystick_min + ((joystick_max - joystick_min)/2);
 
