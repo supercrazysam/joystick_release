@@ -11,8 +11,8 @@ int readIndex = 0; // Index of the current reading
 unsigned long total = 0; // Total of the readings
 unsigned long average = 0; // Average of the readings
 
-float joystick_max = 930.0; //930.0; //v3 true joystick max =940   //900.0;//v2 true joystick max become 950 ///// //600.0;//650.0; //650.0;
-float joystick_min = 110.0; //155.0; //v3 true joystick min =144  //120.0;//v2 true joystick min become 110 ///// //48.0;
+float joystick_max = 950;     //960 clutch joystick    //930.0; //930.0; //v3 true joystick max =940   //900.0;//v2 true joystick max become 950 ///// //600.0;//650.0; //650.0;
+float joystick_min = 120'     //110 clutch joystick    //110.0; //155.0; //v3 true joystick min =144  //120.0;//v2 true joystick min become 110 ///// //48.0;
 
 float joystick_mid = joystick_min + ((joystick_max - joystick_min)/2);
 
@@ -36,10 +36,10 @@ float upstream_max_reverse = 10.0;   //10%
 //you don't want to have a wormgear motor breaking any of the limit of the steel wire tube 
 
 //open end;    vehicle backward direction, pull steel wire out of the tube 
-float top_limit = 2000;     // reduce this number to move the "backward-direction" limit closer to middle point,  increase this number to move the "backward-direction" limit away from middle point 
+float top_limit = 1700;     // reduce this number to move the "backward-direction" limit closer to middle point,  increase this number to move the "backward-direction" limit away from middle point 
 //=========================================================
 //blocker end; vehicle forward direction,  pushs steel wire back into the tube  
-float bottom_limit = 1200;   //increase this number to move the "forward-direction" limit closer to middle point,  decrease this number to move the "forward-direction" limit away from middle point 
+float bottom_limit = 1300;   //increase this number to move the "forward-direction" limit closer to middle point,  decrease this number to move the "forward-direction" limit away from middle point 
 //==========================================================
 float center_position = 1500;  //middle point, NEVER CHANGE
 
