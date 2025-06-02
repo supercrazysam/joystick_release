@@ -11,8 +11,8 @@ int readIndex = 0; // Index of the current reading
 unsigned long total = 0; // Total of the readings
 unsigned long average = 0; // Average of the readings
 
-float joystick_max = 930.0; //v3 true joystick max =940   //900.0;//v2 true joystick max become 950 ///// //600.0;//650.0; //650.0;
-float joystick_min = 155.0; //v3 true joystick min =144  //120.0;//v2 true joystick min become 110 ///// //48.0;
+float joystick_max = 940.0;//true 950   //v3 true joystick max =940   //900.0;//v2 true joystick max become 950 ///// //600.0;//650.0; //650.0;
+float joystick_min = 110.0; //true 100  //v3 true joystick min =144  //120.0;//v2 true joystick min become 110 ///// //48.0;
 
 float joystick_mid = joystick_min + ((joystick_max - joystick_min)/2);
 
