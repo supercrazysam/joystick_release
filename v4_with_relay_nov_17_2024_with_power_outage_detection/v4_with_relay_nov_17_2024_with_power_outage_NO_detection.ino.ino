@@ -46,7 +46,7 @@ bool allowManual = false;         // becomes true after dwell time is satisfied
 //  1375 is the top limit      1545 is the position of mid point, dont change
 // increase the value to move the top limit down, decrease the value to move the top limit up.  
 // ==================
-float top_limit = 1435; //1375;    // increase the top_limit value to move the top limit down, decrease the value to move the top limit up.  
+float top_limit = 1400; //1435; //1375;    // increase the top_limit value to move the top limit down, decrease the value to move the top limit up.  
 //  1665 is the bottom limit      1545 is the position of mid point, dont change
 float bottom_limit = 1620; //1665;     // increase the bottom_limit value to move the bottom_limit down, decrease the value to move the bottom limit up.  
 
