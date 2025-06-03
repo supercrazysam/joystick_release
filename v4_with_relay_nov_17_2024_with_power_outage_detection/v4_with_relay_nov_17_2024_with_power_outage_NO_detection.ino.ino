@@ -32,6 +32,17 @@ float upstream_max_forward = 90.0;   //90%
 float upstream_max_middle  = 50.0;   //50%
 float upstream_max_reverse = 10.0;   //10%
 
+// ---------- dwell-time parameters ----------
+const float MID_LOW  = 47.5;      // lower edge of 50 % window
+const float MID_HIGH = 52.5;      // upper edge of 50 % window
+const unsigned long MID_DWELL_MS = 200;  // how long PWM must stay in window
+
+unsigned long midWindowStart = 0; // time stamp when we first enter window
+bool allowManual = false;         // becomes true after dwell time is satisfied
+// ------------------------------------------
+
+
+
 //  1375 is the top limit      1545 is the position of mid point, dont change
 // increase the value to move the top limit down, decrease the value to move the top limit up.  
 // ==================
@@ -110,43 +121,52 @@ void loop() {
     float dutyCycle = (pulseIn(upstream_analogPin, HIGH, 100000 )/ 2040.82)*100.0; // mega 2560 normal pin by default = 490hz    timeout 0.1s
     upstream_dutycycle_value = constrain( dutyCycle, 0.0, 100.0);
 
-    //if ((upstream_dutycycle_value>=10.0) &&  (upstream_dutycycle_value<=90.0))  //auto upstream override mode, only when its between 10% and 90%
-    
-    //if ((upstream_dutycycle_value>=5.0) &&  (upstream_dutycycle_value<=95.0))  //auto upstream override mode, only when its between 10% and 90%
-    if (  ((upstream_dutycycle_value>=5.0) &&  (upstream_dutycycle_value<=47.5))  || ((upstream_dutycycle_value>=52.5) &&  (upstream_dutycycle_value<=95.0))  )
-      
-    //50.0 is middle   10.0 is max backward   90.0 is max forward
-    {
-      float override_pwm_value = map_upstream(upstream_dutycycle_value);
-      Serial.print("[Override from upstream detected] dutycycle = ");
-      Serial.print(upstream_dutycycle_value);
-      Serial.print("[Override from upstream detected] Mapped Value: ");
-      Serial.println(override_pwm_value);
-      myServo.writeMicroseconds(override_pwm_value);
+    // ---------- dwell-time test (put this right after you calculate upstream_dutycycle_value) ----------
+bool inMidWindow = (upstream_dutycycle_value > MID_LOW && upstream_dutycycle_value < MID_HIGH);
 
-      safe_resume_back_to_manual = 0;  //it already went into upstream override mode, so reset manual flag
+if (inMidWindow) {
+    if (midWindowStart == 0) {                 // first entry into window
+        midWindowStart = millis();
+    } else if (millis() - midWindowStart >= MID_DWELL_MS) {
+        allowManual = true;                    // we have stayed long enough
     }
-    else  //manual mode
-    {
-       if (safe_resume_back_to_manual==0)   //seems like the system just started, or just resume back into manual from upstream override
-       {
-           float resume_manual_mappedValue = safe_start_mapJoystick(average);
-           myServo.writeMicroseconds(center_position);  //always set motor to zero position before joystick have returned to zero
-           if (resume_manual_mappedValue==0) 
-           {
-               safe_resume_back_to_manual = 1;
-           }
-       }
-       else // when its safe, continue manual mode
-       {
-           float mappedValue = mapJoystick(average);
-           Serial.print("Joystick Value: ");
-           Serial.print(average);
-           Serial.print(" Mapped Value: ");
-           Serial.println(mappedValue);
-           myServo.writeMicroseconds(mappedValue);  // set the servo to the current PWM value
-       }
+} else {
+    midWindowStart = 0;                        // left the window; reset
+    allowManual = false;
+}
+// -----------------------------------------------------------------------------------------------
+
+// ------------ choose mode ------------
+if (!allowManual) {          // still in override mode
+    // ------- original OVERRIDE block (unchanged) -------
+    float override_pwm_value = map_upstream(upstream_dutycycle_value);
+    Serial.print("[Override from upstream detected] dutycycle = ");
+    Serial.print(upstream_dutycycle_value);
+    Serial.print("[Override from upstream detected] Mapped Value: ");
+    Serial.println(override_pwm_value);
+    myServo.writeMicroseconds(override_pwm_value);
+    safe_resume_back_to_manual = 0;
+}
+else {                        // dwell satisfied → manual mode
+    // ------- original MANUAL block (unchanged) -------
+    if (safe_resume_back_to_manual == 0) {
+        float resume_manual_mappedValue = safe_start_mapJoystick(average);
+        myServo.writeMicroseconds(center_position);
+        if (resume_manual_mappedValue == 0) {
+            safe_resume_back_to_manual = 1;
+        }
+    } else {
+        float mappedValue = mapJoystick(average);
+        Serial.print("Joystick Value: ");
+        Serial.print(average);
+        Serial.print(" Mapped Value: ");
+        Serial.println(mappedValue);
+        myServo.writeMicroseconds(mappedValue);
     }
+}
+// --------------------------------------
+
+
   }
 
   delay(10); // Small delay to slow down the output
