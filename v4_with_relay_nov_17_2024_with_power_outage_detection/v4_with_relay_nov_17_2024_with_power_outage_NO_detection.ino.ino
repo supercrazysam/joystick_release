@@ -35,7 +35,7 @@ float upstream_max_reverse = 10.0;   //10%
 // ---------- dwell-time parameters ----------
 const float MID_LOW  = 47.5;      // lower edge of 50 % window
 const float MID_HIGH = 52.5;      // upper edge of 50 % window
-const unsigned long MID_DWELL_MS = 200;  // how long PWM must stay in window
+const unsigned long MID_DWELL_MS = 3000;// wait for 3 secs to confirm its actuall wanting to stay in manual mode   200;  // how long PWM must stay in window
 
 unsigned long midWindowStart = 0; // time stamp when we first enter window
 bool allowManual = false;         // becomes true after dwell time is satisfied
