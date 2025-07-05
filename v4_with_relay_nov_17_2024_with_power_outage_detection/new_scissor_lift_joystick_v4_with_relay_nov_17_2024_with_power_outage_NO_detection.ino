@@ -1,6 +1,8 @@
 #include <Servo.h>
 Servo myServo;  // create servo object to control a servo
 
+const int joystickAnalogPin = A15;     // new analog input for 0.5v to 4.5v scissor lift joystick!
+
 const int powerOutagePin = 46;  // Pin connected to the UPS power_outage pin
 
 const int joystickPin = 5; // Pin where the joystick PWM signal is connected    (D2 arduino mega 2560)
@@ -11,8 +13,20 @@ int readIndex = 0; // Index of the current reading
 unsigned long total = 0; // Total of the readings
 unsigned long average = 0; // Average of the readings
 
+/*
 float joystick_max = 940.0;//true 950   //v3 true joystick max =940   //900.0;//v2 true joystick max become 950 ///// //600.0;//650.0; //650.0;
 float joystick_min = 110.0; //true 100  //v3 true joystick min =144  //120.0;//v2 true joystick min become 110 ///// //48.0;
+*/
+
+// 2.  Voltage-to-ADC calibration for the new stick.
+//     0.52 V ≈ 0.52/5 × 1023  = 106
+//     2.53 V ≈ 2.53/5 × 1023  = 517 (midpoint is auto-computed)
+//     4.50 V ≈ 4.50/5 × 1023  = 921
+
+float joystick_max = 921.0;           // ~4.5v       was 940.0 for the PWM stick
+float joystick_min = 106.0;           // ~0.52v      was 110.0      
+
+//513.5  auto computed mid in such case
 
 float joystick_mid = joystick_min + ((joystick_max - joystick_min)/2);
 
@@ -61,7 +75,11 @@ void setup() {
   }
   
   Serial.begin(9600); // Start serial communication at 9600 baud
-  pinMode(joystickPin, INPUT); // Set joystick pin as input
+  pinMode(joystickPin, INPUT); // Set joystick pin as input    //OLD
+
+
+  pinMode(joystickAnalogPin, INPUT);               // new analog stick   scissor lift 0.5-4.5v joystick
+  
   myServo.attach(9);  // attaches the servo on pin 9 to the servo object
   
   // Initialize the powerOutagePin as an input
@@ -83,7 +101,10 @@ void loop() {
   total -= readings[readIndex];
   
   // Read the pulse width of the PWM signal
-  readings[readIndex] = pulseIn(joystickPin, HIGH);
+  //readings[readIndex] = pulseIn(joystickPin, HIGH);   //old
+
+  readings[readIndex] = analogRead(joystickAnalogPin);   // 0–1023
+  
   //Serial.println(readings[readIndex]);
   
   // Add the new reading to the total
