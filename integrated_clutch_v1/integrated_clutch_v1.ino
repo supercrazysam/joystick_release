@@ -1,6 +1,7 @@
 #include <Servo.h>
 Servo myServo;  // create servo object to control a servo
 
+const int joystickAnalogPin = A15;     // <‐- new analog input
 const int powerOutagePin = 46;  // Pin connected to the UPS power_outage pin
 
 const int joystickPin = 5; // Pin where the joystick PWM signal is connected    (D2 arduino mega 2560)
@@ -11,8 +12,16 @@ int readIndex = 0; // Index of the current reading
 unsigned long total = 0; // Total of the readings
 unsigned long average = 0; // Average of the readings
 
-float joystick_max = 950;     //960 clutch joystick    //930.0; //930.0; //v3 true joystick max =940   //900.0;//v2 true joystick max become 950 ///// //600.0;//650.0; //650.0;
-float joystick_min = 120;     //110 clutch joystick    //110.0; //155.0; //v3 true joystick min =144  //120.0;//v2 true joystick min become 110 ///// //48.0;
+//float joystick_max = 950;     //960 clutch joystick    //930.0; //930.0; //v3 true joystick max =940   //900.0;//v2 true joystick max become 950 ///// //600.0;//650.0; //650.0;
+//float joystick_min = 120;     //110 clutch joystick    //110.0; //155.0; //v3 true joystick min =144  //120.0;//v2 true joystick min become 110 ///// //48.0;
+
+float joystick_max = 920.0;           // ~4.5v       was 940.0 for the PWM stick
+float joystick_min =  99.0;           // ~0.52v      was 110.0      
+
+//joystick unit 1
+// 4.497    =   (4.497/5) * 1023 = 920     //safety use, leave some safety margin to prevent unstable max = 910?
+// 2.493    =   (2.493/5) * 1023 = 510
+// 0.484    =   (0.484/5) * 1023 = 99      //safety use, leave some safety margin to prevent unstable max = 109?
 
 float joystick_mid = joystick_min + ((joystick_max - joystick_min)/2);
 
@@ -52,7 +61,8 @@ void setup() {
   }
   
   Serial.begin(9600); // Start serial communication at 9600 baud
-  pinMode(joystickPin, INPUT); // Set joystick pin as input
+  pinMode(joystickPin, INPUT); // Set joystick pin as input   //not used but still set just in case
+  pinMode(joystickAnalogPin, INPUT);               // new analog stick
   myServo.attach(9);  // attaches the servo on pin 9 to the servo object
   
   // Initialize the powerOutagePin as an input
@@ -74,7 +84,8 @@ void loop() {
   total -= readings[readIndex];
   
   // Read the pulse width of the PWM signal
-  readings[readIndex] = pulseIn(joystickPin, HIGH);
+  //readings[readIndex] = pulseIn(joystickPin, HIGH);
+  readings[readIndex] = analogRead(joystickAnalogPin);   // 0–1023
   //Serial.println(readings[readIndex]);
   
   // Add the new reading to the total
