@@ -15,6 +15,7 @@ unsigned long average = 0; // Average of the readings
 //float joystick_max = 950;     //960 clutch joystick    //930.0; //930.0; //v3 true joystick max =940   //900.0;//v2 true joystick max become 950 ///// //600.0;//650.0; //650.0;
 //float joystick_min = 120;     //110 clutch joystick    //110.0; //155.0; //v3 true joystick min =144  //120.0;//v2 true joystick min become 110 ///// //48.0;
 
+//change this according to which joystick set you are using. remember never hot-plug/hot-unplug any joystick.   make sure you are using the right set
 float joystick_max = 935.0;   //920.0;           // ~4.5v       was 940.0 for the PWM stick
 float joystick_min = 102.0;  //99.0;           // ~0.52v      was 110.0      
 
