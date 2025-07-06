@@ -128,7 +128,7 @@ void loop() {
     //if ((upstream_dutycycle_value>=5.0) &&  (upstream_dutycycle_value<=95.0))  //auto upstream override mode, only when its between 10% and 90%
     
       //if (  ((upstream_dutycycle_value>=5.0) &&  (upstream_dutycycle_value<=47.5))  || ((upstream_dutycycle_value>=52.5) &&  (upstream_dutycycle_value<=95.0))  )
-    if (  ((upstream_dutycycle_value>=5.0) &&  (upstream_dutycycle_value<=44))  || ((upstream_dutycycle_value>=56) &&  (upstream_dutycycle_value<=95.0))  )
+    if (  ((upstream_dutycycle_value>=5.0) &&  (upstream_dutycycle_value<=42))  || ((upstream_dutycycle_value>=58) &&  (upstream_dutycycle_value<=95.0))  )
     //50.0 is middle   10.0 is max backward   90.0 is max forward
     {
       float override_pwm_value = map_upstream(upstream_dutycycle_value);
