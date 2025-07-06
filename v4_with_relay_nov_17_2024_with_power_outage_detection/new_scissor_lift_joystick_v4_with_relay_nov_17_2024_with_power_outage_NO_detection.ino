@@ -23,10 +23,13 @@ float joystick_min = 110.0; //true 100  //v3 true joystick min =144  //120.0;//v
 //     2.53 V ≈ 2.53/5 × 1023  = 517 (midpoint is auto-computed)
 //     4.50 V ≈ 4.50/5 × 1023  = 921
 
-float joystick_max = 921.0;           // ~4.5v       was 940.0 for the PWM stick
-float joystick_min = 106.0;           // ~0.52v      was 110.0      
+float joystick_max = 920.0;           // ~4.5v       was 940.0 for the PWM stick
+float joystick_min =  99.0;           // ~0.52v      was 110.0      
 
-//513.5  auto computed mid in such case
+//joystick unit 1
+// 4.497    =   (4.497/5) * 1023 = 920     //safety use, leave some safety margin to prevent unstable max = 910?
+// 2.493    =   (2.493/5) * 1023 = 510
+// 0.484    =   (0.484/5) * 1023 = 99      //safety use, leave some safety margin to prevent unstable max = 109?
 
 float joystick_mid = joystick_min + ((joystick_max - joystick_min)/2);
 
